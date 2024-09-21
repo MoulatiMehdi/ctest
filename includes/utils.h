@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmoulati <mmoulati@1337.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/21 18:38:45 by mmoulati          #+#    #+#             */
+/*   Updated: 2024/09/21 18:38:45 by mmoulati         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef UTILS_H
 
 # define UTILS_H
@@ -17,6 +29,7 @@
 # define PASS "\x1b[1;37;102m PASS \x1b[0m"
 # define FAIL "\x1b[1;37;101m FAIL \x1b[0m"
 # define TAB "\t"
+
 typedef struct s_response
 {
 	char	result[1024];
@@ -28,7 +41,6 @@ typedef struct s_response
 void		msg_pass(char *str);
 void		msg_fail(char *desc, char *expected, char *result);
 void		msg_status(char *func_name, int state);
-void		lltoa(long long value, char *buffer, int size);
 
 void		run_test(char *func_name, void *tests, t_response (*f)(), int size,
 				unsigned long elem_size);
