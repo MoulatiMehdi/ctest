@@ -1,26 +1,46 @@
-CC = cc 
-CFLAGS = -Wall -Wextra -fsanitize=address -g
+# Variables
+CC = @gcc
+CFLAGS = -Wall -Wextra  -g -O0 
+RM = @rm
+RMFLAGS = -rf
 
 
-SRCS=$(wildcard ./srcs/*.c) $(wildcard ./utils/*.c) $(wildcard ../ex*/*.c)
-DEPS=./includes/ ../
-OBJS=$(SRCS:.c=.o)
+DIR_FUNC := $(CURDIR)
+DIR_TEST = $(HOME)/libft-test
+TEST_SRCS = $(DIR_TEST)/srcs
+TEST_UTILS = $(DIR_TEST)/utils
 
-NAME = test
+SRCS = $(wildcard $(DIR_FUNC)/ft_*.c)
+UTILS= $(wildcard $(TEST_UTILS)/*.c)
 
-all : $(NAME)
+TEST_FILES = $(wildcard $(TEST_SRCS)/*.c)
+TEST_BINS = $(TEST_FILES:.c=.out)
 
-$(NAME) : $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
+INCLUDES = $(DIR_TEST)/includes $(DIR_FUNC)/
 
-%.o : %.c $(DEPS)
-	
-	$(CC) $(CFLAGS) -c $(addprefix -I,$(DEPS)) -o $@ $< 
-clean : 
-	rm -f $(OBJS)
-fclean :  clean 
-	rm -f $(NAME)
+FUNCTIONS = $(patsubst $(TEST_SRCS)/test_%.c,%,$(TEST_FILES))
 
-re : fclean all  
+all : $(TEST_BINS) 
 
-.PHONY: re clean fclean all test
+%.out : %.c
+	$(CC) $(CFLAGS) $< $(SRCS) $(UTILS) -o $@ $(addprefix -I,$(INCLUDES));
+	@$@ ;
+	$(RM) $(RMFLAGS) $(TEST_BINS) ;
+	$(RM) $(RMFLAGS) $(addsuffix .dSYM,$(TEST_BINS));
+
+# Pattern rule for generating executable from the given function name
+define compile_test
+$(CC) $(CFLAGS) $(TEST_SRCS)/test_$(1).c $(SRCS) $(UTILS) -o $(1)_test $(addprefix -I,$(INCLUDES))
+endef
+
+$(foreach func, $(FUNCTIONS), \
+$(eval $(func): ; $(call compile_test,$(func)) ; ./$(func)_test ; rm $(RMFLAGS) ./$(func)_test* ;))
+
+
+
+# Rule to clean generated binaries
+clean:
+	$(RM) $(RMFLAGS) $(TEST_BINS) ;
+	$(RM) $(RMFLAGS) $(addsuffix .dSYM,$(TEST_BINS));
+
+.PHONY: clean re all
