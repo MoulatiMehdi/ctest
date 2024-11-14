@@ -6,7 +6,7 @@
 /*   By: mmoulati <mmoulati@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 11:03:50 by mmoulati          #+#    #+#             */
-/*   Updated: 2024/11/10 09:53:12 by mmoulati         ###   ########.fr       */
+/*   Updated: 2024/11/14 11:20:39 by mmoulati         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef TEST_H
@@ -18,6 +18,7 @@
 # include <limits.h>
 # include <signal.h>
 # include <stdarg.h>
+# include <stdint.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -45,12 +46,13 @@ void			msg_status(char *func_name, int state);
 # define TEST_TIMEOUT 6
 # define BUFFER_SIZE 4096
 
-char			desc[BUFFER_SIZE];
+char			g_desc[BUFFER_SIZE];
 
 typedef void	*(*t_func)();
 
 void			report_test_result(int status);
 int				run_test(t_func test_func, void *args);
 char			*str_sig(int status);
+int				test_signal(char *desc, t_func buildin, t_func custom);
 
 #endif
