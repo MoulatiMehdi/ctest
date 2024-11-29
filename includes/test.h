@@ -10,10 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef TEST_H
-
 # define TEST_H
 
-# include "libft.h"
 # include <ctype.h>
 # include <limits.h>
 # include <signal.h>
@@ -48,11 +46,10 @@ void			msg_status(char *func_name, int state);
 
 char			g_desc[BUFFER_SIZE];
 
-typedef void	*(*t_func)();
+typedef void	*(*t_func)(void * args);
 
-void			report_test_result(int status);
 int				run_test(t_func test_func, void *args);
 char			*str_sig(int status);
-int				test_signal(char *desc, t_func buildin, t_func custom);
+int	test_signal(t_func buildin, t_func custom, void *args);
 
 #endif
